@@ -2,7 +2,7 @@ const defaultOptions = {
   timeFormat: 'HH:mm',
   color: 'primary',
   isRange: false,
-  lang: 'en', // internationalization
+  lang: 'en-US', // internationalization
   startTime: undefined,
   endTime: undefined,
   minTime: null,

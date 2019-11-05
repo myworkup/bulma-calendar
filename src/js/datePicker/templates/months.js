@@ -1,12 +1,11 @@
 import {
-  addMonths,
   format
 } from 'date-fns';
 
 export default (data) => {
-  return `${data.months.map((d, i) => `<div class="datepicker-month" data-month="${format(addMonths(d, i), 'MM', {
+  return `${data.months.map((d, i) => `<div class="datepicker-month" data-month="${format(new Date(2100, d, 1), 'MM', {
     locale: data.locale
-  })}">${format(addMonths(d, i), 'MMM', {
+  })}">${format(new Date(2100, d, 1), 'MMM', {
     locale: data.locale
   })}</div>`).join('')}`;
 }

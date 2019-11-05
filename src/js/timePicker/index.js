@@ -2,6 +2,7 @@ import * as utils from '../utils';
 import * as type from '../utils/type';
 import * as dateFns from 'date-fns';
 import EventEmitter from '../utils/events';
+import { enUS } from 'date-fns/locale'
 
 import template from './templates/timepicker';
 import defaultOptions from './defaultOptions';
@@ -156,7 +157,7 @@ export default class timePicker extends EventEmitter {
 					return true;
 				}
 				if (min && max) {
-					return dateFns.isWithinRange(time, min, max);
+					return dateFns.isWithinInterval(time, {start: min, end:max});
 				}
 				if (max) {
 					return dateFns.isBefore(time, max) || dateFns.isEqual(time, max);
@@ -196,9 +197,9 @@ export default class timePicker extends EventEmitter {
 	}
 
 	// Set TimePicker language
-	set lang(lang = 'en') {
+	set lang(lang = 'en-US') {
 		this._lang = lang;
-		this._locale = require('date-fns/locale/' + lang);
+		this._locale = enUS;
 		return this;
 	}
 	// Get current TimePicker language
@@ -561,14 +562,10 @@ export default class timePicker extends EventEmitter {
 				if (type.isString(value)) {
 					const times = value.split(' - ');
 					if (times.length) {
-						this.start = dateFns.format(new Date(times[0]), this.format, {
-							locale: this.locale
-						});
+						this.start = dateFns.parse(times[0], this.format, new Date());
 					}
 					if (times.length === 2) {
-						this.end = dateFns.format(new Date(times[1]), this.format, {
-							locale: this.locale
-						});
+						this.end = dateFns.parse(times[1], this.format, new Date());
 					}
 				}
 				if (type.isObject(value) || type.isDate(value)) {

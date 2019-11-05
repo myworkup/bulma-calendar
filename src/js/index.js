@@ -12,6 +12,9 @@ import template from './templates';
 import templateselection from './templates/header';
 import templateFooter from './templates/footer';
 
+import { enUS } from 'date-fns/locale'
+
+
 export default class bulmaCalendar extends EventEmitter {
   constructor(selector, options = {}) {
     super();
@@ -105,12 +108,12 @@ export default class bulmaCalendar extends EventEmitter {
   }
 
   // Set language
-  set lang(lang = 'en') {
+  set lang(lang = 'en-US') {
     try {
-      this._locale = require('date-fns/locale/' + lang);
+      this._locale = enUS;
     } catch (e) {
-      lang = 'en';
-      this._locale = require('date-fns/locale/' + lang);
+      lang = 'en-US';
+      this._locale = enUS;
     } finally {
       this._lang = lang;
       this.datePicker.lang = lang;
@@ -413,15 +416,15 @@ export default class bulmaCalendar extends EventEmitter {
   }
 
   refresh() {
-    this._ui.header.start.day.innerHTML = this.datePicker.start ? dateFns.format(this.datePicker.start, 'DD', {
+    this._ui.header.start.day.innerHTML = this.datePicker.start ? dateFns.format(this.datePicker.start, 'iiiiii', {
       locale: this.locale
     }) : '--';
-    this._ui.header.start.month.innerHTML = this.datePicker.start ? dateFns.format(this.datePicker.start, 'MMMM YYYY', {
+    this._ui.header.start.month.innerHTML = this.datePicker.start ? dateFns.format(this.datePicker.start, 'MMMM yyyy', {
       locale: this.locale
     }) : '';
     if (this.datePicker.start) {
       this._ui.header.start.weekday.classList.remove('is-hidden');
-      this._ui.header.start.weekday.innerHTML = this.datePicker.start ? dateFns.format(this.datePicker.start, 'dddd', {
+      this._ui.header.start.weekday.innerHTML = this.datePicker.start ? dateFns.format(this.datePicker.start, 'iiii', {
         locale: this.locale
       }) : '';
     } else {
@@ -435,15 +438,15 @@ export default class bulmaCalendar extends EventEmitter {
     }
 
     if (this._ui.header.end) {
-      this._ui.header.end.day.innerHTML = this.options.isRange && this.datePicker.end ? dateFns.format(this.datePicker.end, 'DD', {
+      this._ui.header.end.day.innerHTML = this.options.isRange && this.datePicker.end ? dateFns.format(this.datePicker.end, 'iiiiii', {
         locale: this.locale
       }) : '--';
-      this._ui.header.end.month.innerHTML = this.options.isRange && this.datePicker.end ? dateFns.format(this.datePicker.end, 'MMMM YYYY', {
+      this._ui.header.end.month.innerHTML = this.options.isRange && this.datePicker.end ? dateFns.format(this.datePicker.end, 'MMMM yyyy', {
         locale: this.locale
       }) : '';
       if (this.datePicker.end) {
         this._ui.header.end.weekday.classList.remove('is-hidden');
-        this._ui.header.end.weekday.innerHTML = this.datePicker.end ? dateFns.format(this.datePicker.end, 'dddd', {
+        this._ui.header.end.weekday.innerHTML = this.datePicker.end ? dateFns.format(this.datePicker.end, 'iiii', {
           locale: this.locale
         }) : '';
       } else {
