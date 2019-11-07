@@ -46,11 +46,11 @@ export default class timePicker extends EventEmitter {
 		this.min = this.options.min;
 		this.max = this.options.max;
 		this._time = {
-			start: dateFns.startOfToday(),
-			end: dateFns.endOfToday()
+			start: (this.options.startTime) ? dateFns.parse(this.options.startTime, this.format, new Date()) : dateFns.startOfToday(),
+			end: (this.options.endTime) ? dateFns.parse(this.options.endTime, this.format, new Date()) : dateFns.endOfToday()
 		};
-		this.start = this.options.start || dateFns.startOfToday();
-		this.end = this.options.isRange ? this.options.end : dateFns.endOfToday();
+		this.start =  (this.options.startTime) ? dateFns.parse(this.options.startTime, this.format, new Date()) : dateFns.startOfToday();
+		this.end =  (this.options.endTime) ? dateFns.parse(this.options.endTime, this.format, new Date()) : dateFns.endOfToday();
 
 		this._build();
 		this._bindEvents();
@@ -157,7 +157,7 @@ export default class timePicker extends EventEmitter {
 					return true;
 				}
 				if (min && max) {
-					return dateFns.isWithinInterval(time, {start: min, end:max});
+					return dateFns.isWithinInterval(time, { start: min, end: max });
 				}
 				if (max) {
 					return dateFns.isBefore(time, max) || dateFns.isEqual(time, max);
@@ -291,12 +291,21 @@ export default class timePicker extends EventEmitter {
 	}
 
 	onNextHourStartTimePicker(e) {
+		var updateNext = false;
+
 		if (!this._supportsPassive) {
 			e.preventDefault();
 		}
 		e.stopPropagation();
 
-		this.start = dateFns.addHours(this.start, 1);
+		if (this.isRange) {
+			this.start = dateFns.addHours(this.start, 1);
+			if (dateFns.isBefore(this.end, this.start)) {
+				this.end = dateFns.addHours(this.end, 1);
+				updateNext = true;
+			}
+		}
+
 		setTimeout(() => {
 			this._ui.start.hours.number.classList.add('is-increment-hide');
 
@@ -304,11 +313,22 @@ export default class timePicker extends EventEmitter {
 				this._ui.start.hours.number.innerText = dateFns.format(this.start, 'HH');
 				this._ui.start.hours.input.value = dateFns.format(this.start, 'HH');
 				this._ui.start.hours.number.classList.add('is-increment-visible');
+
+				if (this.isRange && updateNext) {
+					this._ui.end.hours.number.innerText = dateFns.format(this.end, 'HH');
+					this._ui.end.hours.input.value = dateFns.format(this.end, 'HH');
+					this._ui.end.hours.number.classList.add('is-increment-visible');
+				}
 			}, 100);
 
 			setTimeout(() => {
 				this._ui.start.hours.number.classList.remove('is-increment-hide');
 				this._ui.start.hours.number.classList.remove('is-increment-visible');
+
+				if (this.isRange && updateNext) {
+					this._ui.end.hours.number.classList.remove('is-increment-hide');
+					this._ui.end.hours.number.classList.remove('is-increment-visible');
+				}
 			}, 1100);
 		}, 100);
 
@@ -334,7 +354,7 @@ export default class timePicker extends EventEmitter {
 				this._ui.start.minutes.number.innerText = dateFns.format(this.start, 'mm');
 				this._ui.start.minutes.input.value = dateFns.format(this.start, 'mm');
 				this._ui.start.minutes.number.classList.add('is-decrement-visible');
-				
+
 				if (dateFns.format(this.start, 'HH') !== this._ui.start.hours.input.value) {
 					this._ui.start.hours.number.innerText = dateFns.format(this.start, 'HH');
 					this._ui.start.hours.input.value = dateFns.format(this.start, 'HH');
@@ -345,7 +365,7 @@ export default class timePicker extends EventEmitter {
 			setTimeout(() => {
 				this._ui.start.minutes.number.classList.remove('is-decrement-hide');
 				this._ui.start.minutes.number.classList.remove('is-decrement-visible');
-				
+
 				this._ui.start.hours.number.classList.remove('is-decrement-hide');
 				this._ui.start.hours.number.classList.remove('is-decrement-visible');
 			}, 1100);
@@ -363,7 +383,16 @@ export default class timePicker extends EventEmitter {
 		}
 		e.stopPropagation();
 
+		if (this.isRange) {
+			this.start = dateFns.addMinutes(this.start, this.options.minuteSteps);
+			if (dateFns.isBefore(this.end, this.start)) {
+				this.end = dateFns.addMinutes(this.end, this.options.minuteSteps);
+				updateNext = true;
+			}
+		}
+
 		this.start = dateFns.addMinutes(this.start, this.options.minuteSteps);
+
 		setTimeout(() => {
 			this._ui.start.minutes.number.classList.add('is-increment-hide');
 
@@ -377,7 +406,19 @@ export default class timePicker extends EventEmitter {
 					this._ui.start.hours.input.value = dateFns.format(this.start, 'HH');
 					this._ui.start.hours.number.classList.add('is-increment-visible');
 				}
-			}, 100);
+				if (this.isRange && updateNext) {
+					this._ui.end.minutes.number.innerText = dateFns.format(this.end, 'mm');
+					this._ui.end.minutes.input.value = dateFns.format(this.end, 'mm');
+					this._ui.end.minutes.number.classList.add('is-increment-visible');
+
+					if (dateFns.format(this.start, 'HH') !== this._ui.end.hours.input.value) {
+						this._ui.end.hours.number.innerText = dateFns.format(this.end, 'HH');
+						this._ui.end.hours.input.value = dateFns.format(this.end, 'HH');
+						this._ui.end.hours.number.classList.add('is-increment-visible');
+					}
+				}
+
+		}, 100);
 
 			setTimeout(() => {
 				this._ui.start.minutes.number.classList.remove('is-increment-hide');
@@ -385,6 +426,14 @@ export default class timePicker extends EventEmitter {
 
 				this._ui.start.hours.number.classList.remove('is-increment-hide');
 				this._ui.start.hours.number.classList.remove('is-increment-visible');
+
+				if (this.isRange && updateNext) {
+					this._ui.end.minutes.number.classList.remove('is-increment-hide');
+					this._ui.end.minutes.number.classList.remove('is-increment-visible');
+	
+					this._ui.end.hours.number.classList.remove('is-increment-hide');
+					this._ui.end.hours.number.classList.remove('is-increment-visible');
+					}
 			}, 1100);
 		}, 100);
 
@@ -399,6 +448,13 @@ export default class timePicker extends EventEmitter {
 			e.preventDefault();
 		}
 		e.stopPropagation();
+
+		var endTime = dateFns.subHours(this.end, 1);
+		endTime = dateFns.setDate(endTime, dateFns.getDate(this.start));
+		if (dateFns.isBefore(endTime, this.start)) {
+			return;
+		}
+
 
 		this.end = dateFns.subHours(this.end, 1);
 		setTimeout(() => {
@@ -428,6 +484,12 @@ export default class timePicker extends EventEmitter {
 		}
 		e.stopPropagation();
 
+		var endTime = dateFns.addHours(this.end, 1);
+		endTime = dateFns.setDate(endTime, dateFns.getDate(this.start));
+		if (dateFns.isBefore(endTime, this.start)) {
+			return;
+		}
+
 		this.end = dateFns.addHours(this.end, 1);
 		setTimeout(() => {
 			this._ui.end.hours.number.classList.add('is-increment-hide');
@@ -455,6 +517,12 @@ export default class timePicker extends EventEmitter {
 			e.preventDefault();
 		}
 		e.stopPropagation();
+
+		var endTime = dateFns.subMinutes(this.end, this.options.minuteSteps);
+		endTime = dateFns.setDate(endTime, dateFns.getDate(this.start));
+		if (dateFns.isBefore(endTime, this.start)) {
+			return;
+		}
 
 		this.end = dateFns.subMinutes(this.end, this.options.minuteSteps);
 		setTimeout(() => {
@@ -489,6 +557,12 @@ export default class timePicker extends EventEmitter {
 			e.preventDefault();
 		}
 		e.stopPropagation();
+
+		var endTime = dateFns.addMinutes(this.end, this.options.minuteSteps);
+		endTime = dateFns.setDate(endTime, dateFns.getDate(this.start));
+		if (dateFns.isBefore(endTime, this.start)) {
+			return;
+		}
 
 		this.end = dateFns.addMinutes(this.end, this.options.minuteSteps);
 		setTimeout(() => {

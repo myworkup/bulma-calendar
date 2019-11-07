@@ -506,6 +506,11 @@ export default class bulmaCalendar extends EventEmitter {
    * @return {void}
    */
   hide() {
+    if (!this.showFooter) {
+      this.save();
+      this.emit('select', this);  
+    }
+
     this._open = false;
     this._focus = false;
     if (this._ui.modal) {
