@@ -62,6 +62,7 @@ export default class timePicker extends EventEmitter {
 		this.node = document.createRange().createContextualFragment(template({
 			locale: this.locale,
 			isRange: this.options.isRange,
+			validateRange: this.options.validateRange,
 			icons: this.options.icons
 		}));
 
@@ -298,7 +299,7 @@ export default class timePicker extends EventEmitter {
 		}
 		e.stopPropagation();
 
-		if (this.isRange) {
+		if (this.isRange && this.validateRange) {
 			this.start = dateFns.addHours(this.start, 1);
 			if (dateFns.isBefore(this.end, this.start)) {
 				this.end = dateFns.addHours(this.end, 1);
@@ -383,7 +384,7 @@ export default class timePicker extends EventEmitter {
 		}
 		e.stopPropagation();
 
-		if (this.isRange) {
+		if (this.isRange && this.validateRange) {
 			this.start = dateFns.addMinutes(this.start, this.options.minuteSteps);
 			if (dateFns.isBefore(this.end, this.start)) {
 				this.end = dateFns.addMinutes(this.end, this.options.minuteSteps);
@@ -599,6 +600,10 @@ export default class timePicker extends EventEmitter {
 	 ****************************************************/
 	isRange() {
 		return this.options.isRange;
+	}
+
+	validateRange () {
+		return this.options.validateRange;
 	}
 
 	show() {
