@@ -305,6 +305,8 @@ export default class timePicker extends EventEmitter {
 				this.end = dateFns.addHours(this.end, 1);
 				updateNext = true;
 			}
+		} else {
+			this.start = dateFns.addHours(this.start, 1);
 		}
 
 		setTimeout(() => {
@@ -390,9 +392,9 @@ export default class timePicker extends EventEmitter {
 				this.end = dateFns.addMinutes(this.end, this.options.minuteSteps);
 				updateNext = true;
 			}
+		} else {
+			this.start = dateFns.addMinutes(this.start, this.options.minuteSteps);
 		}
-
-		this.start = dateFns.addMinutes(this.start, this.options.minuteSteps);
 
 		setTimeout(() => {
 			this._ui.start.minutes.number.classList.add('is-increment-hide');

@@ -46432,6 +46432,8 @@ var timePicker = function (_EventEmitter) {
 					this.end = __WEBPACK_IMPORTED_MODULE_2_date_fns__["b" /* addHours */](this.end, 1);
 					updateNext = true;
 				}
+			} else {
+				this.start = __WEBPACK_IMPORTED_MODULE_2_date_fns__["b" /* addHours */](this.start, 1);
 			}
 
 			setTimeout(function () {
@@ -46523,9 +46525,9 @@ var timePicker = function (_EventEmitter) {
 					this.end = __WEBPACK_IMPORTED_MODULE_2_date_fns__["c" /* addMinutes */](this.end, this.options.minuteSteps);
 					updateNext = true;
 				}
+			} else {
+				this.start = __WEBPACK_IMPORTED_MODULE_2_date_fns__["c" /* addMinutes */](this.start, this.options.minuteSteps);
 			}
-
-			this.start = __WEBPACK_IMPORTED_MODULE_2_date_fns__["c" /* addMinutes */](this.start, this.options.minuteSteps);
 
 			setTimeout(function () {
 				_this6._ui.start.minutes.number.classList.add('is-increment-hide');
