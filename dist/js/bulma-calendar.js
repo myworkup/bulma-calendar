@@ -46250,6 +46250,7 @@ var timePicker = function (_EventEmitter) {
 			this.node = document.createRange().createContextualFragment(Object(__WEBPACK_IMPORTED_MODULE_5__templates_timepicker__["a" /* default */])({
 				locale: this.locale,
 				isRange: this.options.isRange,
+				validateRange: this.options.validateRange,
 				icons: this.options.icons
 			}));
 
@@ -46425,7 +46426,7 @@ var timePicker = function (_EventEmitter) {
 			}
 			e.stopPropagation();
 
-			if (this.isRange) {
+			if (this.isRange && this.validateRange) {
 				this.start = __WEBPACK_IMPORTED_MODULE_2_date_fns__["b" /* addHours */](this.start, 1);
 				if (__WEBPACK_IMPORTED_MODULE_2_date_fns__["v" /* isBefore */](this.end, this.start)) {
 					this.end = __WEBPACK_IMPORTED_MODULE_2_date_fns__["b" /* addHours */](this.end, 1);
@@ -46516,7 +46517,7 @@ var timePicker = function (_EventEmitter) {
 			}
 			e.stopPropagation();
 
-			if (this.isRange) {
+			if (this.isRange && this.validateRange) {
 				this.start = __WEBPACK_IMPORTED_MODULE_2_date_fns__["c" /* addMinutes */](this.start, this.options.minuteSteps);
 				if (__WEBPACK_IMPORTED_MODULE_2_date_fns__["v" /* isBefore */](this.end, this.start)) {
 					this.end = __WEBPACK_IMPORTED_MODULE_2_date_fns__["c" /* addMinutes */](this.end, this.options.minuteSteps);
@@ -46745,6 +46746,11 @@ var timePicker = function (_EventEmitter) {
 		key: 'isRange',
 		value: function isRange() {
 			return this.options.isRange;
+		}
+	}, {
+		key: 'validateRange',
+		value: function validateRange() {
+			return this.options.validateRange;
 		}
 	}, {
 		key: 'show',
