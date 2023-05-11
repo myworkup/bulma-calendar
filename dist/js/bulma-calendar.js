@@ -46426,7 +46426,7 @@ var timePicker = function (_EventEmitter) {
 			}
 			e.stopPropagation();
 
-			if (this.isRange && this.validateRange) {
+			if (this.options.isRange && this.options.validateRange) {
 				this.start = __WEBPACK_IMPORTED_MODULE_2_date_fns__["b" /* addHours */](this.start, 1);
 				if (__WEBPACK_IMPORTED_MODULE_2_date_fns__["v" /* isBefore */](this.end, this.start)) {
 					this.end = __WEBPACK_IMPORTED_MODULE_2_date_fns__["b" /* addHours */](this.end, 1);
@@ -46517,7 +46517,7 @@ var timePicker = function (_EventEmitter) {
 			}
 			e.stopPropagation();
 
-			if (this.isRange && this.validateRange) {
+			if (this.options.isRange && this.options.validateRange) {
 				this.start = __WEBPACK_IMPORTED_MODULE_2_date_fns__["c" /* addMinutes */](this.start, this.options.minuteSteps);
 				if (__WEBPACK_IMPORTED_MODULE_2_date_fns__["v" /* isBefore */](this.end, this.start)) {
 					this.end = __WEBPACK_IMPORTED_MODULE_2_date_fns__["c" /* addMinutes */](this.end, this.options.minuteSteps);
@@ -46540,7 +46540,7 @@ var timePicker = function (_EventEmitter) {
 						_this6._ui.start.hours.input.value = __WEBPACK_IMPORTED_MODULE_2_date_fns__["l" /* format */](_this6.start, 'HH');
 						_this6._ui.start.hours.number.classList.add('is-increment-visible');
 					}
-					if (_this6.isRange && updateNext) {
+					if (_this6.options.isRange && updateNext) {
 						_this6._ui.end.minutes.number.innerText = __WEBPACK_IMPORTED_MODULE_2_date_fns__["l" /* format */](_this6.end, 'mm');
 						_this6._ui.end.minutes.input.value = __WEBPACK_IMPORTED_MODULE_2_date_fns__["l" /* format */](_this6.end, 'mm');
 						_this6._ui.end.minutes.number.classList.add('is-increment-visible');
@@ -46560,7 +46560,7 @@ var timePicker = function (_EventEmitter) {
 					_this6._ui.start.hours.number.classList.remove('is-increment-hide');
 					_this6._ui.start.hours.number.classList.remove('is-increment-visible');
 
-					if (_this6.isRange && updateNext) {
+					if (_this6.options.isRange && updateNext) {
 						_this6._ui.end.minutes.number.classList.remove('is-increment-hide');
 						_this6._ui.end.minutes.number.classList.remove('is-increment-visible');
 

@@ -299,7 +299,7 @@ export default class timePicker extends EventEmitter {
 		}
 		e.stopPropagation();
 
-		if (this.isRange && this.validateRange) {
+		if (this.options.isRange && this.options.validateRange) {
 			this.start = dateFns.addHours(this.start, 1);
 			if (dateFns.isBefore(this.end, this.start)) {
 				this.end = dateFns.addHours(this.end, 1);
@@ -384,7 +384,7 @@ export default class timePicker extends EventEmitter {
 		}
 		e.stopPropagation();
 
-		if (this.isRange && this.validateRange) {
+		if (this.options.isRange && this.options.validateRange) {
 			this.start = dateFns.addMinutes(this.start, this.options.minuteSteps);
 			if (dateFns.isBefore(this.end, this.start)) {
 				this.end = dateFns.addMinutes(this.end, this.options.minuteSteps);
@@ -407,7 +407,7 @@ export default class timePicker extends EventEmitter {
 					this._ui.start.hours.input.value = dateFns.format(this.start, 'HH');
 					this._ui.start.hours.number.classList.add('is-increment-visible');
 				}
-				if (this.isRange && updateNext) {
+				if (this.options.isRange && updateNext) {
 					this._ui.end.minutes.number.innerText = dateFns.format(this.end, 'mm');
 					this._ui.end.minutes.input.value = dateFns.format(this.end, 'mm');
 					this._ui.end.minutes.number.classList.add('is-increment-visible');
@@ -428,7 +428,7 @@ export default class timePicker extends EventEmitter {
 				this._ui.start.hours.number.classList.remove('is-increment-hide');
 				this._ui.start.hours.number.classList.remove('is-increment-visible');
 
-				if (this.isRange && updateNext) {
+				if (this.options.isRange && updateNext) {
 					this._ui.end.minutes.number.classList.remove('is-increment-hide');
 					this._ui.end.minutes.number.classList.remove('is-increment-visible');
 	
